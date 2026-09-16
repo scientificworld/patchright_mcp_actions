@@ -29,6 +29,7 @@ jobs:
 
             let pkg = await (await fetch(`https://registry.npmjs.org/${pkgname}`)).json();
             let { stdout } = await exec.getExecOutput('git', ['tag']);
+            console.log(stdout);
             for (let v of stdout.split('\n')) {
               let r = verfmt.exec(v);
               if (r != null) {
