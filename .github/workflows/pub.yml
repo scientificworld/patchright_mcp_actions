@@ -5,6 +5,10 @@ on:
     - cron: '40 8 * * *'
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,10 +41,16 @@ jobs:
                 await exec.exec('git', ['reset', '--hard', v]);
                 let json = JSON.parse(fs.readFileSync('package.json'));
                 json.name = pkgname;
+                json.repository.url = 'git+https://github.com/scientificworld/patchright_mcp_actions.git';
+                if (!json.dependencies)
+                  continue;
                 for (let [k, v] of Object.entries(json.dependencies)) {
                   if (k.startsWith('playwright'))
                     json.dependencies[k] = `npm:${k.replaceAll('playw', 'patch')}@${v.split('-')[0]}`;
                 }
-                console.log(JSON.stringify(json, null, '  '));
+                fs.writeFileSync('package.json', JSON.stringify(json, null, '  '));
+                await exec.exec('npm', ['install']);
+                await io.rmRF('node_modules');
+                await exec.exec('git', ['diff']);
               }
             }
