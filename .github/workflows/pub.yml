@@ -29,8 +29,8 @@ jobs:
             for (let v of stdout.split('\n')) {
               let r = verfmt.test(v);
               if (r != null) {
-                r = r[1];
                 console.log(r);
+                r = r[1];
                 await exec.exec('git', ['reset', '--hard', v]);
               }
             }
