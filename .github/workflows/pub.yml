@@ -58,7 +58,7 @@ jobs:
                 fs.writeFileSync('package.json', JSON.stringify(json, null, '  '));
                 try {
                   await exec.exec('npm', ['install']);
-                  await exec.exec('npm', ['run', 'npm-publish']);
+                  await exec.exec('npm', ['run', 'npm-publish', '--', '-f']);
                   await io.rmRF('node_modules');
                 }
                 catch {}
