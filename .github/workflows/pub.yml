@@ -1,0 +1,36 @@
+name: Auto Publish
+
+on:
+  schedule:
+    - cron: '11 45 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout playwright-mcp
+        uses: actions/checkout@v7
+        with:
+          repository: microsoft/playwright-mcp
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: >=18
+
+      - name: Check and publish new versions
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const verfmt = /^v\.?(\d+\.\d+\.\d+)$/;
+            let pkg = await (await fetch('https://registry.npmjs.org/patchright_mcp')).json();
+            let { stdout } = await exec.getExecOutput('git', ['tag']);
+            for (let v of stdout.split('\n')) {
+              let r = verfmt.test(v);
+              if (r != null) {
+                r = r[1];
+                console.log(r);
+                await exec.exec('git', ['reset', '--hard', v]);
+              }
+            }
