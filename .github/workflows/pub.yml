@@ -40,7 +40,7 @@ jobs:
               let r = verfmt.exec(v);
               if (r != null) {
                 r = r[1];
-                if (r in pkg.versions || r in banned)
+                if (r in pkg.versions || banned.includes(r))
                   continue;
                 await exec.exec('git', ['reset', '--hard', v]);
                 let json = JSON.parse(fs.readFileSync('package.json'));
