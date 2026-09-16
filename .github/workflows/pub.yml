@@ -20,7 +20,7 @@ jobs:
           node-version: '>=18'
 
       - name: List
-        run: ls -la
+        run: git tag | cat
 
       - name: Check and publish new versions
         uses: actions/github-script@v9
