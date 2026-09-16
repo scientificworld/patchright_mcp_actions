@@ -44,10 +44,11 @@ jobs:
                   continue;
                 await exec.exec('git', ['reset', '--hard', v]);
                 let json = JSON.parse(fs.readFileSync('package.json'));
-                json.name = pkgname;
-                json.repository.url = `git+https://github.com/${reponame}.git`;
                 if (!json.dependencies)
                   continue;
+                json.name = pkgname;
+                json.repository.url = `git+https://github.com/${reponame}.git`;
+                json.scripts.test = ''; // ignore it...
                 for (let [k, v] of Object.entries(json.dependencies)) {
                   if (k.startsWith('playwright'))
                     json.dependencies[k] = `npm:${k.replaceAll('playw', 'patch')}@${v.replaceAll('^', '').split('-')[0]}`;
