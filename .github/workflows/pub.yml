@@ -49,8 +49,11 @@ jobs:
                     json.dependencies[k] = `npm:${k.replaceAll('playw', 'patch')}@${v.split('-')[0]}`;
                 }
                 fs.writeFileSync('package.json', JSON.stringify(json, null, '  '));
-                await exec.exec('npm', ['install']);
-                await io.rmRF('node_modules');
-                await exec.exec('git', ['diff']);
+                try {
+                  await exec.exec('npm', ['install']);
+                  await exec.exec('git', ['diff']);
+                  await io.rmRF('node_modules');
+                }
+                catch {}
               }
             }
