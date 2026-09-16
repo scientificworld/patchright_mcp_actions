@@ -60,6 +60,5 @@ jobs:
                   await io.rmRF('node_modules');
                 }
                 catch {}
-                break;
               }
             }

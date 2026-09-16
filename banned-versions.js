@@ -1,3 +1,6 @@
+// Every tag included in this list depends on a Playwright version that doesn't have a strictly matching Patchright release.
+// It would be better to map them to higher/lower versions, but that requires some testing, so I just leave it for now.
+
 [
   "0.0.15",
   "0.0.16",
