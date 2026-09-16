@@ -19,8 +19,13 @@ jobs:
         with:
           node-version: '>=18'
 
+      - name: List
+        run: ls -la
+
       - name: Check and publish new versions
         uses: actions/github-script@v9
+        env:
+          PAGER: cat
         with:
           script: |
             const fs = require('fs');
@@ -28,8 +33,8 @@ jobs:
             const pkgname = 'patchright_mcp';
 
             let pkg = await (await fetch(`https://registry.npmjs.org/${pkgname}`)).json();
-            let { stdout } = await exec.getExecOutput('git', ['tag']);
-            console.log(stdout);
+            let { stdout, stderr } = await exec.getExecOutput('git', ['tag']);
+            console.log(stdout, stderr);
             for (let v of stdout.split('\n')) {
               let r = verfmt.exec(v);
               if (r != null) {
